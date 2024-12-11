@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     bool is_S_pressed; 
     bool is_D_pressed; 
     bool is_sprint_pressed;
+    public bool isDead= false; 
     
     // Start is called before the first frame update
     void Start()
@@ -37,20 +39,13 @@ public class PlayerMovement : MonoBehaviour
         originalSpeed=2f; 
       }
       
-      if(is_W_pressed)
-        { 
-             transform.position= transform.position+ new Vector3(0,0,1)* originalSpeed* Time.deltaTime; 
-        }
-      
+    
       if(is_A_pressed)
         { 
              transform.position= transform.position+ new Vector3(-1,0,0)* originalSpeed* Time.deltaTime; 
         }
       
-      if(is_S_pressed)
-        { 
-             transform.position= transform.position+ new Vector3(0,0,-1)* originalSpeed* Time.deltaTime; 
-        }
+  
       
       if(is_D_pressed)
         { 
@@ -58,11 +53,33 @@ public class PlayerMovement : MonoBehaviour
         }
      
      bool JumpPressed = Input.GetKeyDown(KeyCode.Space);
-     if (JumpPressed)
+      if (JumpPressed)
      {
          Rigidbody2D MyRigidbody =GetComponent<Rigidbody2D>();
          MyRigidbody.AddForce( new Vector3 (0,5,0), ForceMode2D.Impulse);
      }
-        
+    
+     if (isDead)
+
+        {
+
+            SceneManager.LoadScene(2);
+
+        }
+    
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+      {
+
+        if (other.gameObject.CompareTag("Fall"))
+
+        {
+
+            isDead = true;
+
+        }
+
+    }
+
 }
